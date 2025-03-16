@@ -59,7 +59,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string'
+        ]);
+
+        $category = Category::findOrFail($id);
+        $category->update($request->only('name'));
+
+        return response()->json($category, 200);
     }
 
     /**
@@ -67,6 +74,10 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Elimina una categoría
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        return response()->json(['message' => 'Categoría eliminada correctamente'], 200);
     }
 }
